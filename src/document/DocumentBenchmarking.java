@@ -34,6 +34,8 @@ public class DocumentBenchmarking {
 		// You can play around with this.
 		int start = 50000;
 		
+		// Print table header
+		System.out.println("NumberOfChars\tBasicTime\tEfficientTime");
 		// TODO: Fill in the rest of this method so that it runs two loops
 		// and prints out timing results as described in the assignment 
 		// instructions and following the pseudocode below.
@@ -58,6 +60,36 @@ public class DocumentBenchmarking {
 			 * 6. Print out the time it took to complete the loop in step 5 
 			 *      (on the same line as the first print statement) followed by a newline (\n) 
 			 */  
+
+			 // 1. Print out numToCheck followed by a tab
+			System.out.print(numToCheck + "\t");
+
+			// 2. Read numToCheck characters from the file into a String
+			String text = getStringFromFile(textfile, numToCheck);
+
+			// 3. Time BasicDocument creation and fleschScore calculation
+			long startTime = System.nanoTime();
+			for (int i = 0; i < trials; i++) {
+				BasicDocument basicDoc = new BasicDocument(text);
+				basicDoc.getFleschScore();
+			}
+			long endTime = System.nanoTime();
+			long basicTime = endTime - startTime;
+
+			// 4. Print out the time for BasicDocument
+			System.out.print(basicTime + "\t");
+
+			// 5. Time EfficientDocument creation and fleschScore calculation
+			startTime = System.nanoTime();
+			for (int i = 0; i < trials; i++) {
+				EfficientDocument efficientDoc = new EfficientDocument(text);
+				efficientDoc.getFleschScore();
+			}
+			endTime = System.nanoTime();
+			long efficientTime = endTime - startTime;
+
+			// 6. Print out the time for EfficientDocument followed by a newline
+			System.out.println(efficientTime);
 			 
 		}
 	
