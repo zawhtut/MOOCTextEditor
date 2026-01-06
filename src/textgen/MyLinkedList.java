@@ -16,7 +16,11 @@ public class MyLinkedList<E> extends AbstractList<E> {
 
 	/** Create a new empty LinkedList */
 	public MyLinkedList() {
-		// TODO: Implement this method
+		head = new LLNode<E>(null);
+		tail = new LLNode<E>(null);
+		head.next = tail;
+		tail.prev = head;
+		size = 0;
 	}
 
 	/**
@@ -25,16 +29,30 @@ public class MyLinkedList<E> extends AbstractList<E> {
 	 */
 	public boolean add(E element ) 
 	{
-		// TODO: Implement this method
-		return false;
+		if (element == null) {
+			throw new NullPointerException("Cannot add null element");
+		}
+		LLNode<E> newNode = new LLNode<E>(element);
+		newNode.prev = tail.prev;
+		newNode.next = tail;
+		tail.prev.next = newNode;
+		tail.prev = newNode;
+		size++;
+		return true;
 	}
 
 	/** Get the element at position index 
 	 * @throws IndexOutOfBoundsException if the index is out of bounds. */
 	public E get(int index) 
 	{
-		// TODO: Implement this method.
-		return null;
+		if (index < 0 || index >= size) {
+			throw new IndexOutOfBoundsException("Index out of bounds");
+		}
+		LLNode<E> current = head.next;
+		for (int i = 0; i < index; i++) {
+			current = current.next;
+		}
+		return current.data;
 	}
 
 	/**
@@ -44,15 +62,29 @@ public class MyLinkedList<E> extends AbstractList<E> {
 	 */
 	public void add(int index, E element ) 
 	{
-		// TODO: Implement this method
+		if (index < 0 || index > size) {
+			throw new IndexOutOfBoundsException("Index out of bounds");
+		}
+		if (element == null) {
+			throw new NullPointerException("Cannot add null element");
+		}
+		LLNode<E> current = head;
+		for (int i = 0; i < index; i++) {
+			current = current.next;
+		}
+		LLNode<E> newNode = new LLNode<E>(element);
+		newNode.next = current.next;
+		newNode.prev = current;
+		current.next.prev = newNode;
+		current.next = newNode;
+		size++;
 	}
 
 
 	/** Return the size of the list */
 	public int size() 
 	{
-		// TODO: Implement this method
-		return -1;
+		return size;
 	}
 
 	/** Remove a node at the specified index and return its data element.
@@ -63,8 +95,18 @@ public class MyLinkedList<E> extends AbstractList<E> {
 	 */
 	public E remove(int index) 
 	{
-		// TODO: Implement this method
-		return null;
+		if (index < 0 || index >= size) {
+			throw new IndexOutOfBoundsException("Index out of bounds");
+		}
+		LLNode<E> current = head.next;
+		for (int i = 0; i < index; i++) {
+			current = current.next;
+		}
+		E data = current.data;
+		current.prev.next = current.next;
+		current.next.prev = current.prev;
+		size--;
+		return data;
 	}
 
 	/**
@@ -76,8 +118,19 @@ public class MyLinkedList<E> extends AbstractList<E> {
 	 */
 	public E set(int index, E element) 
 	{
-		// TODO: Implement this method
-		return null;
+		if (index < 0 || index >= size) {
+			throw new IndexOutOfBoundsException("Index out of bounds");
+		}
+		if (element == null) {
+			throw new NullPointerException("Cannot set null element");
+		}
+		LLNode<E> current = head.next;
+		for (int i = 0; i < index; i++) {
+			current = current.next;
+		}
+		E oldData = current.data;
+		current.data = element;
+		return oldData;
 	}   
 }
 

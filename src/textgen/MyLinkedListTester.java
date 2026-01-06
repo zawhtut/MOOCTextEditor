@@ -114,7 +114,19 @@ public class MyLinkedListTester {
 		assertEquals("Remove: check element 0 is correct ", (Integer)21, list1.get(0));
 		assertEquals("Remove: check size is correct ", 2, list1.size());
 		
-		// TODO: Add more tests here
+		// Test lower bounds
+		try {
+			list1.remove(-1);
+			fail("Check out of bounds");
+		} catch (IndexOutOfBoundsException e) {
+		}
+		
+		// Test upper bounds
+		try {
+			list1.remove(list1.size());
+			fail("Check out of bounds");
+		} catch (IndexOutOfBoundsException e) {
+		}
 	}
 	
 	/** Test adding an element into the end of the list, specifically
@@ -123,8 +135,22 @@ public class MyLinkedListTester {
 	@Test
 	public void testAddEnd()
 	{
-        // TODO: implement this test
+		// Test adding to empty list
+		emptyList.add(1);
+		assertEquals("Add to empty: check size", 1, emptyList.size());
+		assertEquals("Add to empty: check element", (Integer)1, emptyList.get(0));
 		
+		// Test adding to existing list
+		shortList.add("C");
+		assertEquals("Add to end: check size", 3, shortList.size());
+		assertEquals("Add to end: check element", "C", shortList.get(2));
+		
+		// Test null element
+		try {
+			shortList.add(null);
+			fail("Should throw NullPointerException");
+		} catch (NullPointerException e) {
+		}
 	}
 
 	
@@ -132,7 +158,22 @@ public class MyLinkedListTester {
 	@Test
 	public void testSize()
 	{
-		// TODO: implement this test
+		// Test empty list
+		assertEquals("Size of empty list", 0, emptyList.size());
+		
+		// Test short list
+		assertEquals("Size of shortList", 2, shortList.size());
+		
+		// Test longer list
+		assertEquals("Size of longerList", LONG_LIST_LENGTH, longerList.size());
+		
+		// Test size after adding
+		emptyList.add(1);
+		assertEquals("Size after add", 1, emptyList.size());
+		
+		// Test size after removing
+		shortList.remove(0);
+		assertEquals("Size after remove", 1, shortList.size());
 	}
 
 	
@@ -144,16 +185,72 @@ public class MyLinkedListTester {
 	@Test
 	public void testAddAtIndex()
 	{
-        // TODO: implement this test
+		// Test adding at beginning
+		list1.add(0, 99);
+		assertEquals("Add at 0: check element", (Integer)99, list1.get(0));
+		assertEquals("Add at 0: check size", 4, list1.size());
 		
+		// Test adding in middle
+		list1.add(2, 88);
+		assertEquals("Add at 2: check element", (Integer)88, list1.get(2));
+		assertEquals("Add at 2: check size", 5, list1.size());
+		
+		// Test null element
+		try {
+			list1.add(0, null);
+			fail("Should throw NullPointerException");
+		} catch (NullPointerException e) {
+		}
+		
+		// Test lower bounds
+		try {
+			list1.add(-1, 77);
+			fail("Check out of bounds");
+		} catch (IndexOutOfBoundsException e) {
+		}
+		
+		// Test upper bounds
+		try {
+			list1.add(list1.size() + 1, 66);
+			fail("Check out of bounds");
+		} catch (IndexOutOfBoundsException e) {
+		}
 	}
 	
 	/** Test setting an element in the list */
 	@Test
 	public void testSet()
 	{
-	    // TODO: implement this test
-	    
+		// Test set in short list
+		String old = shortList.set(0, "X");
+		assertEquals("Set: check old value", "A", old);
+		assertEquals("Set: check new value", "X", shortList.get(0));
+		assertEquals("Set: check size unchanged", 2, shortList.size());
+		
+		// Test set at end
+		String old2 = shortList.set(1, "Y");
+		assertEquals("Set at end: check old value", "B", old2);
+		assertEquals("Set at end: check new value", "Y", shortList.get(1));
+		
+		// Test null element
+		try {
+			shortList.set(0, null);
+			fail("Should throw NullPointerException");
+		} catch (NullPointerException e) {
+		}
+		
+		// Test out of bounds
+		try {
+			shortList.set(-1, "Z");
+			fail("Check out of bounds");
+		} catch (IndexOutOfBoundsException e) {
+		}
+		
+		try {
+			shortList.set(10, "Z");
+			fail("Check out of bounds");
+		} catch (IndexOutOfBoundsException e) {
+		}
 	}
 	
 	
