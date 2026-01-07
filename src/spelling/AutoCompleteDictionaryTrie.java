@@ -40,6 +40,24 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
 	public boolean addWord(String word)
 	{
 	    //TODO: Implement this method.
+	    String lowerCase = word.toLowerCase();
+	    TrieNode current = root;
+	    
+	    for (int i = 0; i < lowerCase.length(); i++) {
+	        char c = lowerCase.charAt(i);
+	        TrieNode child = current.getChild(c);
+	        
+	        if (child == null) {
+	            child = current.insert(c);
+	        }
+	        current = child;
+	    }
+	    
+	    if (!current.endsWord()) {
+	        current.setEndsWord(true);
+	        size++;
+	        return true;
+	    }
 	    return false;
 	}
 	
@@ -50,7 +68,7 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
 	public int size()
 	{
 	    //TODO: Implement this method
-	    return 0;
+	    return size;
 	}
 	
 	
@@ -60,7 +78,20 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
 	public boolean isWord(String s) 
 	{
 	    // TODO: Implement this method
-		return false;
+	    String lowerCase = s.toLowerCase();
+	    TrieNode current = root;
+	    
+	    for (int i = 0; i < lowerCase.length(); i++) {
+	        char c = lowerCase.charAt(i);
+	        TrieNode child = current.getChild(c);
+	        
+	        if (child == null) {
+	            return false;
+	        }
+	        current = child;
+	    }
+	    
+		return current.endsWord();
 	}
 
 	/** 
@@ -101,7 +132,38 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
     	 //       Add all of its child nodes to the back of the queue
     	 // Return the list of completions
     	 
-         return null;
+    	 List<String> completions = new LinkedList<String>();
+    	 String lowerCase = prefix.toLowerCase();
+    	 
+    	 // Step 1: Find the stem in the trie
+    	 TrieNode current = root;
+    	 for (int i = 0; i < lowerCase.length(); i++) {
+    	     char c = lowerCase.charAt(i);
+    	     TrieNode child = current.getChild(c);
+    	     
+    	     if (child == null) {
+    	         return completions; // empty list
+    	     }
+    	     current = child;
+    	 }
+    	 
+    	 // Step 2: Perform BFS from the stem node
+    	 LinkedList<TrieNode> queue = new LinkedList<TrieNode>();
+    	 queue.add(current);
+    	 
+    	 while (!queue.isEmpty() && completions.size() < numCompletions) {
+    	     TrieNode node = queue.remove();
+    	     
+    	     if (node.endsWord()) {
+    	         completions.add(node.getText());
+    	     }
+    	     
+    	     for (Character c : node.getValidNextCharacters()) {
+    	         queue.add(node.getChild(c));
+    	     }
+    	 }
+    	 
+         return completions;
      }
 
  	// For debugging

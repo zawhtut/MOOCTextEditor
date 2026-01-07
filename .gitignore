@@ -81,3 +81,6 @@ $RECYCLE.BIN/
 # JDK installations
 jdk*/
 jdk-*.tar.gz
+
+#Copilot
+.copilot-notes/
